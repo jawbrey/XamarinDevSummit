@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns:local="clr-namespace:SummitWeather.Converters" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:d="http://xamarin.com/schemas/2014/forms/design" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="SummitWeather.MainPage">
+   <ContentPage.Resources> <ResourceDictionary>
+        <local:UnixDateTimeConverter x:Key="UnixDateTime" />
+        <local:TempColorConverter x:Key="TempColor" />
+    </ResourceDictionary>
+        </ContentPage.Resources>
+    <StackLayout Padding="10,50,10,10">
+        <SearchBar Text="{Binding Zip}" Placeholder="Enter Zip" SearchButtonPressed="GetWeather" />
+        <Frame BackgroundColor="{Binding CurrentWeather.Main.Temp, Converter={StaticResource TempColor}}" CornerRadius="12" >
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                <Image Margin="20" Scale="3" Source="{Binding WeatherIcon}" />
+                <StackLayout Margin="20" Padding="20">
+                    <Label Text="{Binding CurrentWeather.Main.Temp}" FontSize="Large" d:Text="City" />
+                    <Label Text="{Binding CurrentWeather.Name}" d:Text="Temp" />
+                    <Label Text="{Binding CurrentWeather.WeatherWeather[0].Main}" />
+                    <Label Text="{Binding CurrentWeather.Main.TempMax, StringFormat='High: {0}'}" />
+                    <Label Text="{Binding CurrentWeather.Main.TempMin, StringFormat='Low: {0}'}" />
+                    <Label Text="{Binding CurrentWeather.Sys.Sunrise, StringFormat='Sunrise: {0:t}', Converter={StaticResource UnixDateTime}}" />
+                    <Label Text="{Binding CurrentWeather.Sys.Sunset, StringFormat='Sunset: {0:t}', Converter={StaticResource UnixDateTime}}" />
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+        <CollectionView SelectionMode="Single" SelectionChanged="Handle_SelectionChanged" ItemsSource="{Binding Locations}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="{Binding Name}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>
